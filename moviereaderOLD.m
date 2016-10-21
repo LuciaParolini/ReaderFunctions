@@ -1,3 +1,8 @@
+
+% This is one of the first versions of the moviereader. It doesn't read all
+% the cameras. But it may be good to keep it because the earlier movies had
+% a slighlty different structure. This may be able to read those.
+
 % A very Basic Matlab interface to the .movie binary files
 classdef moviereaderOLD < handle
     
@@ -36,15 +41,15 @@ classdef moviereaderOLD < handle
             %
             % USAGE: movie=moviereader(filename);
             %        movie=moviereader(filename,directory);
-           
+            
             datadir='';
             if nargin>1
                 datadir=varargin{1};
-				if ~strcmp(datadir(end),'/');
-	                datadir=[datadir,'/'];
-	            end
-            end 
-           
+                if ~strcmp(datadir(end),'/');
+                    datadir=[datadir,'/'];
+                end
+            end
+            
             
             movie.Directory=datadir;
             movie.Filename=moviename;
@@ -177,11 +182,11 @@ classdef moviereaderOLD < handle
                     
                     c_timestamp(1,[1,2]) = fread(fid,2,'*uint64');       % time of the first image
                     
- 
+                    
                     
                     if (movie.version == 1)
                         data_shape([1 2 3 4 5 6]) = fread(fid,6,'*uint32');
-                     
+                        
                         timestamp_pos = 28+dim_char;
                     end
                     
@@ -194,7 +199,7 @@ classdef moviereaderOLD < handle
                     movie.height= data_shape(2);
                     
                     movie.data_depth = 8;  %this is number of bytes 8 or 16
-                    %movie.data_depth = 16;  
+                    %movie.data_depth = 16;
                     %checking if the movie contains full or cropped frames
                     if (data_shape(3) == movie.width) && (data_shape(4) == movie.height)
                         movie.image_bytes = movie.width*movie.height;
@@ -232,7 +237,7 @@ classdef moviereaderOLD < handle
         
         function IM=read(movie,varargin)
             % Function that loads frames contained in the movie
-            % movie is a moviereader object, previously created 
+            % movie is a moviereader object, previously created
             %
             % USAGE: frames=movie.read;              -load all the frames
             %        frames=movie.read(num);         -load the nth frame
@@ -277,13 +282,13 @@ classdef moviereaderOLD < handle
             fmap=memmapfile([movie.Directory,movie.Filename],...
                 'Offset', offset,...
                 'Format', {'uint8' double([1, movie.length_header]) 'info';
-                           ['uint',int2str(movie.data_depth)] double([movie.width, movie.height]) 'IM'},...                     
+                ['uint',int2str(movie.data_depth)] double([movie.width, movie.height]) 'IM'},...
                 'Repeat', N_frames_to_load);
             %keeping only the images
             data=fmap.data;
             clear fmap
             IM=[data.IM];
-            clear data 
+            clear data
             
             %reshaping the image vector
             IM=reshape(IM,movie.width,movie.height,N_frames_to_load);

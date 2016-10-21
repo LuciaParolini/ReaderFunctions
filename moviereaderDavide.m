@@ -1,5 +1,8 @@
 % A very Basic Matlab interface to the .movie binary files
-classdef moviereader < handle
+% Davide's version of the moviereader
+
+
+classdef moviereaderDavide < handle
     
     % movie properties and data
     properties
@@ -9,9 +12,6 @@ classdef moviereader < handle
         FrameRate % The number of frames recorded in a second
         width     % The image width, in pixels
         height    % The image height, in pixels
-        
-        
-        
     end
     
     properties (SetAccess=private, Hidden)

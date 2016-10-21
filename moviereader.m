@@ -1,4 +1,9 @@
-% A very Basic Matlab interface to the .movie binary files
+% A Matlab interface to the .movie binary files
+
+% Latest version of the moviereader from Luigi. Scroll_movie and
+% scroll_movie_app need this version of the moviereader to work. With this
+% version you can extract the metadata. 
+
 classdef moviereader < handle
     
     % movie properties and data
