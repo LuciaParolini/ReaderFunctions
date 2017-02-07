@@ -45,7 +45,7 @@ classdef bioreader < handle
             if nargin>1
                 if ~isnumeric(varargin{1})
                     datadir=varargin{1};
-                    if ~strcmp(datadir(end),'/');
+                    if ~strcmp(datadir(end),'/')
                         datadir=[datadir,'/'];
                     end
                 end
@@ -80,7 +80,7 @@ classdef bioreader < handle
             %val_str=all.values.toString.toCharArray';
 
             movie.planeSize = loci.formats.FormatTools.getPlaneSize(movie.info);
-            if movie.planeSize/(1024)^3 >= 2,
+            if movie.planeSize/(1024)^3 >= 2
                 error(['Image plane too large. Only 2GB of data can be extracted '...
                     'at one time. You can workaround the problem by opening '...
                     'the plane in tiles.']);
@@ -115,9 +115,9 @@ classdef bioreader < handle
                 movie.NumberOfFrames=movie.size_Z;
             end
             
-            dpixXAll = movie.info.getMetadataStore.getPixelsPhysicalSizeX(0);
+            dpixXAll = movie.info.getMetadataStore.getPixelsPhysicalSizeX(NSERIE-1);
             dpixX = dpixXAll.value;
-            dpixYAll = movie.info.getMetadataStore.getPixelsPhysicalSizeY(0);
+            dpixYAll = movie.info.getMetadataStore.getPixelsPhysicalSizeY(NSERIE-1);
             dpixY = dpixYAll.value;
             
             if dpixX ~= dpixY
@@ -155,11 +155,11 @@ classdef bioreader < handle
             
             if nargin==2
                 range=varargin{1};
-                if length(range)>2;
+                if length(range)>2
                     disp('I cannot load non contiguous frames. Call load iteratively');
                     return
                 end
-            elseif nargin==1;
+            elseif nargin==1
                 range=[1,movie.NumberOfFrames];
             end
             
@@ -175,7 +175,7 @@ classdef bioreader < handle
                 end
             end
             
-            absoluterange=find(movie.ZCT(:,2)==movie.CSlice);
+            absoluterange=find(movie.ZCT(:,2) == movie.CSlice);
             
             if movie.height<movie.width
                 
@@ -208,8 +208,8 @@ classdef bioreader < handle
 
                 if movie.height<movie.width
                     
-                    foo=imresize(foo,[movie.height,movie.height],'cubic','antialiasing',true);
-                    foo=((foo-min(foo(:)))./(max(foo(:))-min(foo(:)))*255);
+                    foo = imresize(foo,[movie.height,movie.height],'cubic','antialiasing',true);
+                    foo = ((foo-min(foo(:)))./(max(foo(:))-min(foo(:)))*255);
                     movie.width=movie.height;
                     size(foo)
                 else
